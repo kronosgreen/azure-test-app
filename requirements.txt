@@ -1,6 +1,7 @@
 bokeh
 pandas
 sqlalchemy
+psycopg2
 Flask
 tornado
 azure-identity

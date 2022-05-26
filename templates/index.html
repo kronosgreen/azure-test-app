@@ -22,14 +22,23 @@
     </div>
   </nav>
 
-  <div class="d-flex">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Average Annual Working Hours Per Worker</h6>
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column m-5 p-2">
+
+    <!-- Main Content -->
+    <div id="content">
+
+      <div class="d-flex">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Average Annual Working Hours Per Worker</h6>
+          </div>
+          <div class="card-body">
+            {{ script|safe }}
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        {{ script|safe }}
-      </div>
+
     </div>
   </div>
 

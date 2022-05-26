@@ -3,3 +3,5 @@ pandas
 sqlalchemy
 Flask
 tornado
+azure-identity
+azure-keyvault-secrets

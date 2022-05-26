@@ -62,7 +62,7 @@ def favicon():
 def bk_worker():
     # Can't pass num_procs > 1 in this configuration. If you need to run multiple
     # processes, see e.g. flask_gunicorn_embed.py
-    server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=["127.0.0.1:5000"])
+    server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=["127.0.0.1:8000"])
     server.start()
     server.io_loop.start()
 
@@ -70,4 +70,4 @@ def bk_worker():
 Thread(target=bk_worker).start()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=8000)

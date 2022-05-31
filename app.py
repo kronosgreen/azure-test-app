@@ -33,8 +33,11 @@ db = 'test-db'
 connection_url = '%s://%s:%s@%s/%s?sslmode=require' % \
     (engine, user, urlquote(password), host, db)
 
+print("Connecting to database...")
 db_engine = create_engine(connection_url)
+
 with db_engine.connect() as conn:
+    print("Getting data...")
     df = pd.read_sql('SELECT * FROM annual_working_hours_per_worker', conn)
 
 
@@ -62,12 +65,15 @@ def favicon():
 def bk_worker():
     # Can't pass num_procs > 1 in this configuration. If you need to run multiple
     # processes, see e.g. flask_gunicorn_embed.py
-    server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=["0.0.0.0:8000"])
+    server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=["localhost:5006"])
     server.start()
     server.io_loop.start()
 
 
+print("Spinning up Bokeh worker")
 Thread(target=bk_worker).start()
 
 if __name__ == '__main__':
-    app.run(port=8000)
+    port = 8000
+    print("Running app on port %s" % (port))
+    app.run()

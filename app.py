@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask_cors import CORS
 
 from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
@@ -19,6 +20,7 @@ from threading import Thread
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)
 
 vault_url = 'https://dashboard-test-keys.vault.azure.net/'
 credential = DefaultAzureCredential()
@@ -66,7 +68,7 @@ def bk_worker():
     # Can't pass num_procs > 1 in this configuration. If you need to run multiple
     # processes, see e.g. flask_gunicorn_embed.py
     server = Server({'/bkapp': bkapp}, io_loop=IOLoop(),
-                    allow_websocket_origin=["localhost:5006/bkapp", "127.0.0.1:5000", "localhost:5000"])
+                    allow_websocket_origin=["127.0.0.1:5000", "localhost:5000"])
     server.start()
     server.io_loop.start()
 

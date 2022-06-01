@@ -62,7 +62,7 @@ def bkapp_page():
         print(ex)
         print("Unable to get Hostname and IP")
 
-    script = server_document('0.0.0.0:5006/bkapp')
+    script = server_document('http://127.0.0.1:5006/bkapp')
     return render_template("index.html", script=script)
 
 

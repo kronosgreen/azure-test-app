@@ -6,18 +6,17 @@ from azure.identity import DefaultAzureCredential
 
 from urllib.parse import quote_plus as urlquote
 from sqlalchemy import create_engine
-from sqlalchemy.sql import text
 
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.embed import server_document
 from bokeh.server.server import Server
-from bokeh.io import curdoc
 from tornado.ioloop import IOLoop
 
 from os.path import join
 from threading import Thread
 
 import pandas as pd
+import socket
 
 app = Flask(__name__)
 CORS(app)
@@ -54,7 +53,16 @@ def bkapp(doc):
 
 @app.route('/', methods=['GET'])
 def bkapp_page():
-    script = server_document('http://localhost:5006/bkapp')
+    try:
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        print("Hostname :  %s" % host_name)
+        print("IP : %s" % host_ip)
+    except Exception as ex:
+        print(ex)
+        print("Unable to get Hostname and IP")
+        
+    script = server_document('%s:5006/bkapp' % host)
     return render_template("index.html", script=script)
 
 
@@ -68,7 +76,8 @@ def bk_worker():
     # Can't pass num_procs > 1 in this configuration. If you need to run multiple
     # processes, see e.g. flask_gunicorn_embed.py
     server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=[
-                    "127.0.0.1:5000", "localhost:5000", "localhost:5006", "dashboard-flask-demo.azurewebsites.net"])
+                    "127.0.0.1:5000", "localhost:5000", "localhost:5006",
+                    "dashboard-flask-demo.azurewebsites.net:5006"])
     server.start()
     server.io_loop.start()
 
@@ -76,7 +85,6 @@ def bk_worker():
 print("Spinning up Bokeh worker")
 Thread(target=bk_worker).start()
 
+print("Running app...")
 if __name__ == '__main__':
-    port = 8000
-    print("Running app on port %s" % (port))
     app.run()

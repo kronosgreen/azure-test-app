@@ -61,8 +61,8 @@ def bkapp_page():
     except Exception as ex:
         print(ex)
         print("Unable to get Hostname and IP")
-        
-    script = server_document('%s:5006/bkapp' % host)
+
+    script = server_document('0.0.0.0:5006/bkapp')
     return render_template("index.html", script=script)
 
 
@@ -77,7 +77,7 @@ def bk_worker():
     # processes, see e.g. flask_gunicorn_embed.py
     server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=[
                     "127.0.0.1:5000", "localhost:5000", "localhost:5006",
-                    "dashboard-flask-demo.azurewebsites.net:5006"])
+                    "dashboard-flask-demo.azurewebsites.net"])
     server.start()
     server.io_loop.start()
 
